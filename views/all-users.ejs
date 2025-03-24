@@ -1,0 +1,60 @@
+<style>
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+<%- include('include/header') %>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <%- include('include/sidemenu') %>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Welcome</h1>
+            <div>
+                <button onclick="location.href='/profile'">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="content">
+            <button onclick="location.href='/add-user'">Add New</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(user) { %>   <!-- Loop through each user in the users array -->
+                        <tr>
+                            <td><%= user.id %></td>           <!-- Display user ID -->
+                            <td><%= user.name %></td>         <!-- Display user Name -->
+                            <td><%= user.email %></td>        <!-- Display user Email -->
+                            <td><a href="/edit-user/<%= user.id %>">Edit</a> || <a href="/user-delete/<%= user.id %>">Delete</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+<%- include('include/footer') %>
