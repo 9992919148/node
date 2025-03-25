@@ -13,4 +13,6 @@ route.get('/add-user', authenticateJWT, constoller.addUserForm);
 route.post('/save-user', authenticateJWT, constoller.saveUser);
 route.get('/edit-user/:id', authenticateJWT, constoller.editUserForm);
 route.post('/update-user', authenticateJWT, constoller.updateUser);
+route.get('/user-delete/:id', authenticateJWT, constoller.deleteUser);
+route.get('/cases', authenticateJWT, constoller.getCase);
 module.exports = route;  

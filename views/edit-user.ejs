@@ -122,13 +122,22 @@ h1 {
                     <input type="password" id="password" name="password" value="<%= data.password %>" required placeholder="Enter password" />
                 </div>
                 <div class="form-group">
-                    <label for="password">Role:</label>
-                    <input type="checkbox"  name="role[]" value="Admin"  />
-                    <input type="checkbox"  name="role[]" value="Superadmin"  />
-                    <input type="checkbox"  name="role[]" value="user"  />
+                    <label for="password">Gender:</label>
+                    <select name="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male"<%= data.gender == 'Male' ? 'selected' : '' %>>Male</option>
+                        <option value="Female"<%= data.gender == 'Female' ? 'selected' : '' %>>Female</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <img src="/uploads/<%= data.img %>" height="50px" width="50px">
+                    <label for="password">Role:=<%= data.role%></label>
+                    <input type="checkbox"  name="role[]" value="1" <%= data.role.includes('1') ? 'checked' : '' %> /> SuperAdmin
+                    <input type="checkbox"  name="role[]" value="2" <%= data.role.includes('2') ? 'checked' : '' %> /> Vendor
+                    <input type="checkbox"  name="role[]" value="3" <%= data.role.includes('3') ? 'checked' : '' %> /> User
+                </div>
+                <div class="form-group">
+                    <img src="/<%= data.img %>" height="50px" width="50px">
+                    <input type="hidden" name="old_img" value="<%= data.img %>">
                     <label for="password">Image:</label>
                     <input type="file"  name="img"  />
                 </div>

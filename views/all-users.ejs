@@ -39,6 +39,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -48,6 +49,7 @@
                             <td><%= user.id %></td>           <!-- Display user ID -->
                             <td><%= user.name %></td>         <!-- Display user Name -->
                             <td><%= user.email %></td>        <!-- Display user Email -->
+                            <td><img src="/<%= user.img %>" height="40px" width="50px"></td>
                             <td><a href="/edit-user/<%= user.id %>">Edit</a> || <a href="/user-delete/<%= user.id %>">Delete</a></td>
                         </tr>
                     <% }) %>

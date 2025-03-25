@@ -111,6 +111,13 @@ const registerUser = async (req, res) => {
 const allUser=async(req, res) =>{
     try{
         const [rows]=await dbcon.promise().query('select * from users');
+        // rows.forEach(row => {
+        //     if (row.role) {
+        //         row.role = row.role.split(',');  // Split the role string into an array
+        //     } else {
+        //         row.role = [];  // If role is null or undefined, set it to an empty array
+        //     }
+        // });
         res.render('all-users', { data: rows});
 
     }catch(err){}
@@ -143,6 +150,8 @@ const editUserForm=async(req, res) =>{
     const id=req.params.id;
     
     const [row]=await dbcon.promise().query('select * from users where id= ?', [id]);
+    row[0].role = row[0].role ? row[0].role.split(',') : [];
+    console.log(row[0]);
     res.render('edit-user', { data: row[0]});
 }
 const updateUser=async(req, res) =>{
@@ -151,19 +160,44 @@ const updateUser=async(req, res) =>{
         if (err) {
           return res.status(400).send({ message: err.message });
         }
-    const { name, email, password, id } = req.body;
+    const { name, email, password, id, gender, role } = req.body;
     if (!name || !email || !password) {
         return res.render('edit-user', { errorMessage: 'All fields are required.' });
     }
     try{
-        const imagePath = req.file ? path.basename(req.file.path) : null;
+        const imagePath = req.file ? path.basename(req.file.path) : req.body.old_img;
+        const rolStr = role.join(", ");
         const [rows] = await dbcon.promise().query('SELECT * FROM users WHERE email = ? and id != ?', [email,id]);
         if (rows.length > 0) {
             return res.render('edit-user', { errorMessage: 'Email is already registered.', successMessage: null });
         }
-        await dbcon.promise().query('update users set name = ?, email = ?, password = ?, img = ? where id = ?', [name, email, password, imagePath, id]);
+        await dbcon.promise().query('update users set name = ?, email = ?, password = ?, img = ?, gender = ?, role = ? where id = ?', [name, email, password, imagePath, gender, rolStr, id]);
         res.redirect('/all-users');
     }catch(err){}
 });
 }
-module.exports={ index,loginUser,showLogin,showRegister,registerUser,logout,allUser,addUserForm,saveUser,editUserForm,updateUser };
+const deleteUser=async(req,res) => {
+    const id=req.params.id;
+    const [rows] = await dbcon.promise().query('delete from users where id=?',[id]);
+    res.redirect('/all-users');
+}
+const getCase=async(req,res) => {
+    const id=req.session.userId;
+    const [rows] = await dbcon.promise().query("select 14_qry.qry_id, DATE_FORMAT(14_qry.created_at, '%d-%m-%Y') AS created_at,users.name,14_cat.cat_desc from 14_qry inner join users on 14_qry.user_id=users.id inner join 14_cat on 14_cat.cat_id=14_qry.cat_id where user_id=?",[id]);
+    console.log(rows);
+    res.render('cases', { data: rows});
+}
+module.exports={ index,
+    loginUser,
+    showLogin,
+    showRegister,
+    registerUser,
+    logout,
+    allUser,
+    addUserForm,
+    saveUser,
+    editUserForm,
+    updateUser,
+    deleteUser,
+    getCase 
+};

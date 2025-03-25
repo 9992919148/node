@@ -14,13 +14,14 @@ app.use(session({
   secret: 'your_secret_key', // Change this to a secret key
   resave: false,
   saveUninitialized: true,
+  rolling: true,
   cookie: {
     maxAge: 3600000 ,  // Set session timeout to 10 minutes (in milliseconds)
     httpOnly: true,           // Helps prevent client-side access to the cookie
     secure: false             // Set to true if you're using HTTPS
 }
 }));
-app.use('/uploads', express.static('uploads'));
+app.use('/', express.static('uploads'));
 app.use('/', route);
 
 app.set('view engine', 'ejs');
