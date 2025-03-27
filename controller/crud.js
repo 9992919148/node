@@ -1,6 +1,10 @@
 const dbcon=require('../db');
 const multer = require('multer');
 const path = require('path');
+const Parser = require('json2csv');
+const fs = require('fs');
+
+
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -109,18 +113,17 @@ const registerUser = async (req, res) => {
     }
 };
 const allUser=async(req, res) =>{
+    const sname=req.query.sname || '';
     try{
-        const [rows]=await dbcon.promise().query('select * from users');
-        // rows.forEach(row => {
-        //     if (row.role) {
-        //         row.role = row.role.split(',');  // Split the role string into an array
-        //     } else {
-        //         row.role = [];  // If role is null or undefined, set it to an empty array
-        //     }
-        // });
+        let qry='select * from users';
+        if(sname!='') {
+            qry+=' where name like ?';
+        }
+        const [rows]=await dbcon.promise().query(qry, [`%${sname}%`]);
         res.render('all-users', { data: rows});
-
-    }catch(err){}
+    }catch(err){
+        console.log('error-'+err);
+    }
 }
 const addUserForm=async(req, res) =>{
     res.render('add-user', { errorMessage: null, successMessage: null});
